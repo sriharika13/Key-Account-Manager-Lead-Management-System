@@ -9,6 +9,7 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
 @Table(name = "leads",
         indexes = {
                 @Index(name = "idx_leads_kam_status", columnList = "kam_id, status"),

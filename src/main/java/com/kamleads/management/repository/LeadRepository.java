@@ -48,6 +48,8 @@ public interface LeadRepository extends JpaRepository<Lead, UUID>, LeadRepositor
             "GROUP BY l.city " +
             "ORDER BY COUNT(l) DESC")
     List<Object[]> findLeadDistributionByCity(@Param("kamId") UUID kamId);
+
+    Page<Lead> findLeadsWithFilters(UUID kamId, String searchTerm, List<LeadStatus> statuses, String city, Pageable pageable);
 }
 
 

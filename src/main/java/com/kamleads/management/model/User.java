@@ -11,22 +11,25 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import com.kamleads.management.model.Lead;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users",
         indexes = {
                 @Index(name = "idx_users_email", columnList = "email", unique = true)
         })
-public class User { //User Entity represents Key Account Managers (KAMs)
-//    When saving this entity to the database, automatically generate a value for the id field. Use a generator named 'UUID' for that.
+public class User implements UserDetails { //User Entity represents Key Account Managers (KAMs)
+    //    When saving this entity to the database, automatically generate a value for the id field. Use a generator named 'UUID' for that.
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name="UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
@@ -64,7 +67,7 @@ public class User { //User Entity represents Key Account Managers (KAMs)
             orphanRemoval = false  // Don't delete leads if KAM is removed
     )
     @JsonManagedReference("user-leads")
-    private List<Lead> leads= new ArrayList<>();
+    private List<Lead> leads = new ArrayList<>();
 
     // One-to-Many: One KAM creates many interactions
     @OneToMany(
@@ -83,47 +86,65 @@ public class User { //User Entity represents Key Account Managers (KAMs)
     private List<CallSchedule> scheduledCalls;
 
     // Constructors
-    public User() {}  // Required by JPA
+    public User() {
+    }  // Required by JPA
 
-    public User(String name, String email) {
+    // --- Constructor for convenience (optional) ---
+    public User(UUID id, String name, String email, String passwordHash, String timezone) {
+        this.id = id;
         this.name = name;
         this.email = email;
+        this.passwordHash = passwordHash;
+        this.timezone = timezone;
     }
-    // Getters and Setters (Spring Boot generates these via Lombok in real projects)
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getTimezone() { return timezone; }
-    public void setTimezone(String timezone) { this.timezone = timezone; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-
-    public List<Lead> getLeads() { return leads; }
-    public void setLeads(List<Lead> leads) { this.leads = leads; }
-
-    public List<Interaction> getInteractions() { return interactions; }
-    public void setInteractions(List<Interaction> interactions) { this.interactions = interactions; }
-
-
-    public void addLead(Lead lead){
-        if(lead!=null){
+    public void addLead(Lead lead) {
+        if (lead != null) {
             leads.add(lead);
             lead.setKam(this); // Maintain bidirectional relationship
         }
 
     }
 
-    public void removeLead(Lead lead){
-        if(lead!=null) {
+    public void removeLead(Lead lead) {
+        if (lead != null) {
             leads.remove(lead);
             lead.setKam(null);
         }
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_KAM"));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.passwordHash;
+    }
+
+    public String getUsername() {
+        return this.email; // Using email as the username for authentication
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Always true for now, implement logic if needed
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Always true for now, implement logic if needed
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Always true for now, implement logic if needed
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Always true for now, implement logic if needed (e.g., email verification)
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.kamleads.management.repository;
 
 import com.kamleads.management.model.Contact;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +33,12 @@ public interface ContactRepository extends JpaRepository<Contact, UUID> {
     @Query("SELECT c.role, COUNT(c) FROM Contact c WHERE c.lead.kam.id = :kamId " +
             "GROUP BY c.role ORDER BY COUNT(c) DESC")
     List<Object[]> findContactRoleDistribution(@Param("kamId") UUID kamId);
+
+    List<Contact> findByLeadIdOrderByNameAsc(UUID id);
+
+    Optional<Contact> findPrimaryContactByLeadId(UUID id);
+
+    Optional<Contact> findByLeadIdAndEmail(UUID id, @Email(message = "Email should be valid") @Size(max = 150, message = "Email must not exceed 150 characters") String email);
 }
 
 //@Repository

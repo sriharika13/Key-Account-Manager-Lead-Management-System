@@ -13,13 +13,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface InteractionRepository extends JpaRepository<Interaction, UUID> {
 
     // Basic finder methods
-    List<Interaction> findByLeadId(UUID leadId);
+    Page<Interaction> findByLeadId(UUID leadId,Pageable pageable);
     List<Interaction> findByKamId(UUID kamId);
     Page<Interaction> findByLeadIdOrderByInteractionDateDesc(UUID leadId, Pageable pageable);
 
@@ -60,6 +61,20 @@ public interface InteractionRepository extends JpaRepository<Interaction, UUID> 
     @Query("SELECT i FROM Interaction i WHERE i.followUpDate = :date AND i.kam.id = :kamId")
     List<Interaction> findFollowUpsForDate(@Param("kamId") UUID kamId,
                                            @Param("date") LocalDate date);
+
+    Long countByLeadIdAndInteractionDateAfter(UUID leadId, LocalDateTime thirtyDaysAgo);
+
+    Long countByLeadIdAndTypeAndInteractionDateAfter(UUID leadId, InteractionType interactionType, LocalDateTime thirtyDaysAgo);
+
+    Integer countByContactId(UUID id);
+
+    @Query("SELECT i FROM Interaction i WHERE i.kam.id = :kamId AND i.followUpDate = :date")
+    List<Interaction> findInteractionsRequiringFollowUp(@Param("kamId") UUID kamId, @Param("date") LocalDate date);
+
+
+    Page<Interaction> findByKamIdAndDateRange(UUID kamId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+
+    BigDecimal calculateTotalOrderValueByKamAndDateRange(UUID kamId, LocalDateTime startDate, LocalDateTime endDate);
 }
 
 

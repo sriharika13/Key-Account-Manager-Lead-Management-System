@@ -1,0 +1,165 @@
+package com.kamleads.management.service;
+
+import com.kamleads.management.dto.LeadPerformanceDTO;
+//import com.kamleads.management.dto.LeadPerformanceDto;
+import com.kamleads.management.dto.LeadSummaryDto;
+import com.kamleads.management.dto.response.UserResponseDto;
+import com.kamleads.management.enums.InteractionType;
+import com.kamleads.management.enums.LeadStatus;
+import com.kamleads.management.model.User;
+import com.kamleads.management.repository.InteractionRepository;
+import com.kamleads.management.repository.LeadRepository;
+import com.kamleads.management.repository.PerformanceMetricsRepository;
+import com.kamleads.management.repository.UserRepository;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@Data
+public class AnalyticsService {
+
+    private final LeadRepository leadRepository;
+    private final InteractionRepository interactionRepository;
+    private final UserRepository userRepository;
+    private final PerformanceMetricsRepository performanceMetricsRepository; // For historical metrics if needed
+
+    @Autowired
+    public AnalyticsService(LeadRepository leadRepository, InteractionRepository interactionRepository,
+                            UserRepository userRepository, PerformanceMetricsRepository performanceMetricsRepository) {
+        this.leadRepository = leadRepository;
+        this.interactionRepository = interactionRepository;
+        this.userRepository = userRepository;
+        this.performanceMetricsRepository = performanceMetricsRepository;
+    }
+
+    /**
+     * Provides a summary of lead statistics for a specific KAM.
+     *
+     * @param kamId The UUID of the KAM.
+     * @return LeadSummaryDto containing total leads, active leads, leads requiring calls, and average performance score.
+     * @throws RuntimeException if KAM not found.
+     */
+    @Transactional(readOnly = true)
+    public LeadSummaryDto getKamLeadSummary(UUID kamId) {
+        if (!userRepository.existsById(kamId)) {
+            throw new RuntimeException("KAM not found with ID: " + kamId);
+        }
+        return leadRepository.getLeadSummaryForKam(kamId);
+    }
+
+    /**
+     * Retrieves performance analytics for leads under a specific KAM within a date range.
+     *
+     * @param kamId The UUID of the KAM.
+     * @param startDate Start date for the analytics period.
+     * @param endDate End date for the analytics period.
+     * @return List of LeadPerformanceDto.
+     * @throws RuntimeException if KAM not found.
+     */
+    @Transactional(readOnly = true)
+    public List<LeadPerformanceDTO> getLeadPerformanceAnalytics(UUID kamId, LocalDate startDate, LocalDate endDate) {
+        if (!userRepository.existsById(kamId)) {
+            throw new RuntimeException("KAM not found with ID: " + kamId);
+        }
+        return leadRepository.findLeadPerformanceAnalytics(kamId, startDate, endDate);
+    }
+
+    /**
+     * Retrieves the count of interactions by type for a specific KAM.
+     *
+     * @param kamId The UUID of the KAM.
+     * @return A map where key is InteractionType (String) and value is count (Long).
+     * @throws RuntimeException if KAM not found.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Long> getInteractionCountsByKamAndType(UUID kamId) {
+        if (!userRepository.existsById(kamId)) {
+            throw new RuntimeException("KAM not found with ID: " + kamId);
+        }
+        return List.of(InteractionType.values()).stream()
+                .collect(Collectors.toMap(
+                        Enum::name,
+                        type -> interactionRepository.findInteractionCountByKamAndType(kamId, type, LocalDateTime.now())
+                ));
+    }
+
+    /**
+     * Retrieves the distribution of leads by status for a specific KAM.
+     *
+     * @param kamId The UUID of the KAM.
+     * @return A map where key is LeadStatus (String) and value is count (Long).
+     * @throws RuntimeException if KAM not found.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Long> getLeadStatusDistributionByKam(UUID kamId) {
+        if (!userRepository.existsById(kamId)) {
+            throw new RuntimeException("KAM not found with ID: " + kamId);
+        }
+        List<Object[]> results = leadRepository.countLeadsByStatus(kamId);
+        return results.stream()
+                .collect(Collectors.toMap(
+                        row -> ((LeadStatus) row[0]).name(),
+                        row -> (Long) row[1]
+                ));
+    }
+
+    /**
+     * Retrieves the total order value generated by a KAM within a specified date range.
+     *
+     * @param kamId The UUID of the KAM.
+     * @param startDate Start date for the period.
+     * @param endDate End date for the period.
+     * @return Total order value as BigDecimal.
+     * @throws RuntimeException if KAM not found.
+     */
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalOrderValueByKam(UUID kamId, LocalDateTime startDate, LocalDateTime endDate) {
+        if (!userRepository.existsById(kamId)) {
+            throw new RuntimeException("KAM not found with ID: " + kamId);
+        }
+        // This requires a new custom query in InteractionRepository or a more complex JPA query.
+        // For simplicity, let's assume a method like this exists or will be added.
+        // You would need to add this to InteractionRepository:
+        // @Query("SELECT COALESCE(SUM(i.orderValue), 0) FROM Interaction i WHERE i.kam.id = :kamId AND i.type = 'ORDER' AND i.interactionDate BETWEEN :startDate AND :endDate")
+        // BigDecimal calculateTotalOrderValueByKamAndDateRange(@Param("kamId") UUID kamId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+        return interactionRepository.calculateTotalOrderValueByKamAndDateRange(kamId, startDate, endDate);
+    }
+
+    /**
+     * Retrieves a list of top-performing KAMs based on some criteria (e.g., average lead performance score, total order value).
+     * This is a placeholder and would require more complex aggregation logic, possibly in a custom repository or a view.
+     *
+     * @param pageable Pagination information.
+     * @return Page of UserResponseDto representing top KAMs.
+     */
+    @Transactional(readOnly = true)
+    public Page<UserResponseDto> getTopPerformingKams(Pageable pageable) {
+        // This is a complex query that would likely involve joins and aggregations across Users, Leads, and Interactions.
+        // It's not directly supported by existing simple repository methods.
+        // For demonstration, returning all KAMs with leads, but real implementation would need a custom query.
+        return userRepository.findKamsWithLeads(pageable).map(user -> {
+            UserResponseDto dto = new UserResponseDto();
+            dto.setId(user.getId());
+            dto.setName(user.getName());
+            dto.setEmail(user.getEmail());
+            // You would calculate and set performance metrics here for each KAM
+            // For example:
+            // LeadSummaryDto summary = leadRepository.getLeadSummaryForKam(user.getId());
+            // dto.setAveragePerformanceScore(summary.getAveragePerformanceScore());
+            // dto.setTotalLeads(summary.getTotalLeads());
+            return dto;
+        });
+    }
+}

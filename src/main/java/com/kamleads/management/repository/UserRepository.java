@@ -1,6 +1,11 @@
 package com.kamleads.management.repository;
 
 import com.kamleads.management.model.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,6 +37,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             "GROUP BY u " +
             "ORDER BY leadCount DESC")
     List<Object[]> findKamsWithActiveLeadCounts();
+
+    boolean existsByEmail(@NotBlank(message = "Email is required") @Email(message = "Email should be valid") @Size(max = 150, message = "Email must not exceed 150 characters") String email);
+
+    Page<User> findKamsWithLeads(Pageable pageable);  //?????
 }
 
 

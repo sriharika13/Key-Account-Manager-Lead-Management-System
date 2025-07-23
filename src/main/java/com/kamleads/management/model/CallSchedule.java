@@ -47,6 +47,7 @@ public class CallSchedule {
 
     @Column(name = "scheduled_date", nullable = false)
     @NotNull(message = "Scheduled date is required")
+    @NotNull(message = "Scheduled date is required")
     private LocalDate scheduledDate;
 
     @Enumerated(EnumType.STRING)
