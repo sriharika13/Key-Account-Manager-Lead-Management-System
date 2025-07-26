@@ -2,9 +2,9 @@
 
 -- Insert sample KAMs
 INSERT INTO users (id, name, email, timezone, password_hash) VALUES
-    ('11111111-1111-1111-1111-111111111111', 'Rajesh Kumar', 'rajesh.kumar@udaan.com', 'Asia/Kolkata', '$2a$12$LQv3c1yqBwYVHpuPIFjxou7fJQcJz6/s123'),
-    ('22222222-2222-2222-2222-222222222222', 'Priya Sharma', 'priya.sharma@udaan.com', 'Asia/Kolkata', '$2a$12$LQv3c1yqBwYVHpuPIFjxou8fJQcJz6/s456'),
-    ('33333333-3333-3333-3333-333333333333', 'Amit Singh', 'amit.singh@udaan.com', 'Asia/Kolkata', '$2a$12$LQv3c1yqBwYVHpuPIFjxou9fJQcJz6/s789');
+    ('11111111-1111-1111-1111-111111111111', 'Rajesh Kumar', 'rajesh.kumar@udaan.com', 'Asia/Kolkata', '$2a$10$B1OL8W6yIW1DDeqRt.8KlOK3rVfHVCjBn4gJ3KCt.tDeVnIh80F96'),
+    ('22222222-2222-2222-2222-222222222222', 'Priya Sharma', 'priya.sharma@udaan.com', 'Asia/Kolkata', '$2a$10$B1OL8W6yIW1DDeqRt.8KlOK3rVfHVCjBn4gJ3KCt.tDeVnIh80F96'),
+    ('33333333-3333-3333-3333-333333333333', 'Amit Singh', 'amit.singh@udaan.com', 'Asia/Kolkata', '$2a$10$B1OL8W6yIW1DDeqRt.8KlOK3rVfHVCjBn4gJ3KCt.tDeVnIh80F96');
 
 -- Insert sample restaurant leads
 INSERT INTO leads (id, name, city, cuisine_type, status, kam_id, call_frequency, last_call_date, performance_score) VALUES

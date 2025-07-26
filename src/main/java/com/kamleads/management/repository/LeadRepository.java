@@ -35,10 +35,11 @@ public interface LeadRepository extends JpaRepository<Lead, UUID>, LeadRepositor
                                       Pageable pageable);
 
     // Call scheduling queries
+    // FIXED: Changed date arithmetic to use a JPQL-compatible function (DATE_ADD)
     @Query("SELECT l FROM Lead l WHERE l.kam.id = :kamId " +
             "AND l.status NOT IN ('CLOSED_WON', 'CLOSED_LOST') " +
             "AND (l.lastCallDate IS NULL " +
-            "OR l.lastCallDate + INTERVAL l.callFrequency DAY <= :today)")
+            "OR FUNCTION('DATE_ADD', l.lastCallDate, l.callFrequency, 'DAY') <= :today)")
     List<Lead> findLeadsRequiringCallsToday(@Param("kamId") UUID kamId,
                                             @Param("today") LocalDate today);
 
@@ -49,25 +50,5 @@ public interface LeadRepository extends JpaRepository<Lead, UUID>, LeadRepositor
             "ORDER BY COUNT(l) DESC")
     List<Object[]> findLeadDistributionByCity(@Param("kamId") UUID kamId);
 
-    Page<Lead> findLeadsWithFilters(UUID kamId, String searchTerm, List<LeadStatus> statuses, String city, Pageable pageable);
+    // No need to declare findLeadsWithFilters here, it's in LeadRepositoryCustom
 }
-
-
-
-//@Repository
-//public interface LeadRepository extends JpaRepository<Lead, UUID>, LeadRepositoryCustom {
-//    List<Lead> findByKamIdAndStatusIn(UUID kamId, List<LeadStatus> statuses);
-//    Page<Lead> findByKamId(UUID kamId, Pageable pageable);
-//
-//    @Query("SELECT l FROM Lead l WHERE l.kam.id = :kamId AND (l.lastCallDate IS NULL OR (l.lastCallDate + INTERVAL l.callFrequency DAY) <= :today) AND l.status NOT IN ('CLOSED_WON', 'CLOSED_LOST')")
-//    List<Lead> findLeadsRequiringCallsToday(@Param("kamId") UUID kamId, @Param("today") LocalDate today);
-//
-//    @Query("SELECT l FROM Lead l WHERE l.kam.id = :kamId ORDER BY l.performanceScore DESC")
-//    List<Lead> findTopPerformingLeads(@Param("kamId") UUID kamId, Pageable pageable);
-//
-//    List<Lead> findByKamIdAndPerformanceScoreGreaterThanEqual(UUID kamId, BigDecimal minScore);
-//    List<Lead> findByCityIgnoreCase(String city);
-//
-//    @Query("SELECT l.status, COUNT(l) FROM Lead l WHERE l.kam.id = :kamId GROUP BY l.status")
-//    List<Object[]> countLeadsByStatus(@Param("kamId") UUID kamId);
-//}

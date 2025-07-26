@@ -9,7 +9,7 @@ import lombok.Data;
 
 import java.util.UUID;
 
-@Data
+
 public class LeadCreateRequestDto {
     @NotBlank(message = "Restaurant name is required")
     @Size(max = 200, message = "Name must not exceed 200 characters")
@@ -28,5 +28,55 @@ public class LeadCreateRequestDto {
     @Min(value = 1, message = "Call frequency must be at least 1 day")
     private Integer callFrequency;
 
+    public LeadStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LeadStatus status) {
+        this.status = status;
+    }
+
+    public Integer getCallFrequency() {
+        return callFrequency;
+    }
+
+    public void setCallFrequency(Integer callFrequency) {
+        this.callFrequency = callFrequency;
+    }
+
+    public UUID getKamId() {
+        return kamId;
+    }
+
+    public void setKamId(UUID kamId) {
+        this.kamId = kamId;
+    }
+
+    public String getCuisineType() {
+        return cuisineType;
+    }
+
+    public void setCuisineType(String cuisineType) {
+        this.cuisineType = cuisineType;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private LeadStatus status = LeadStatus.NEW;
+
+
 }

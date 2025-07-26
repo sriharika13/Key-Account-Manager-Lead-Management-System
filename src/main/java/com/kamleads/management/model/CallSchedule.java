@@ -30,6 +30,70 @@ import java.util.UUID;
 @Getter
 @Setter
 public class CallSchedule {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public User getKam() {
+        return kam;
+    }
+
+    public void setKam(User kam) {
+        this.kam = kam;
+    }
+
+    public Lead getLead() {
+        return lead;
+    }
+
+    public void setLead(Lead lead) {
+        this.lead = lead;
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public CallStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CallStatus status) {
+        this.status = status;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getNextScheduledDate() {
+        return nextScheduledDate;
+    }
+
+    public void setNextScheduledDate(LocalDate nextScheduledDate) {
+        this.nextScheduledDate = nextScheduledDate;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)

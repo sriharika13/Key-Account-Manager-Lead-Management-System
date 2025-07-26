@@ -17,10 +17,10 @@ public class JwtUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    @Value("${kamleads.app.jwtSecret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${kamleads.app.jwtExpirationMs}")
+    @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
     private Key getSigningKey() {

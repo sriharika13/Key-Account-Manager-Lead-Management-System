@@ -40,6 +40,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(@NotBlank(message = "Email is required") @Email(message = "Email should be valid") @Size(max = 150, message = "Email must not exceed 150 characters") String email);
 
+    // Find active KAMs with leads
+    // Explicitly naming the query to ensure it's picked up correctly
+    @Query(value = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.leads l WHERE SIZE(u.leads) > 0",
+            name = "User.findKamsWithLeads") // Added name attribute
     Page<User> findKamsWithLeads(Pageable pageable);  //?????
 }
 

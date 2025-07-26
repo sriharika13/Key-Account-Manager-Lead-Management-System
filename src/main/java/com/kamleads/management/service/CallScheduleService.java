@@ -20,9 +20,20 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Data
 @Service
 public class CallScheduleService {
+
+    public CallScheduleRepository getCallScheduleRepository() {
+        return callScheduleRepository;
+    }
+
+    public LeadRepository getLeadRepository() {
+        return leadRepository;
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
 
     private final CallScheduleRepository callScheduleRepository;
     private final LeadRepository leadRepository;
@@ -289,7 +300,6 @@ public class CallScheduleService {
         dto.setStatus(callSchedule.getStatus());
         dto.setPriority(callSchedule.getPriority());
         dto.setNextScheduledDate(callSchedule.getNextScheduledDate());
-        dto.setIsOverdue(callSchedule.getScheduledDate().isBefore(LocalDate.now()) && CallStatus.PENDING.equals(callSchedule.getStatus()));
         return dto;
     }
 }

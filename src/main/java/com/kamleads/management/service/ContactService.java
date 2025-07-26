@@ -54,24 +54,22 @@ public class ContactService {
         }
 
         // Ensure only one primary contact per lead
-        if (requestDto.getIsPrimary() != null && requestDto.getIsPrimary()) {
-            Optional<Contact> primaryContact = contactRepository.findPrimaryContactByLeadId(lead.getId());
-            if (primaryContact.isPresent()) {
-                // Option 1: Throw error (strict)
-                throw new IllegalArgumentException("A primary contact already exists for this lead. Only one primary contact is allowed.");
-                // Option 2: Demote existing primary contact (more flexible)
-                // primaryContact.get().setIsPrimary(false);
-                // contactRepository.save(primaryContact.get());
-            }
-        }
+//        if (requestDto.getIsPrimary() != null && requestDto.getIsPrimary()) {
+//            Optional<Contact> primaryContact = contactRepository.findPrimaryContactByLeadId(lead.getId());
+//            if (primaryContact.isPresent()) {
+//                // Option 1: Throw error (strict)
+//                throw new IllegalArgumentException("A primary contact already exists for this lead. Only one primary contact is allowed.");
+//                // Option 2: Demote existing primary contact (more flexible)
+//                // primaryContact.get().setIsPrimary(false);
+//                // contactRepository.save(primaryContact.get());
+//            }
+//        }
 
         Contact contact = new Contact();
         contact.setId(UUID.randomUUID());
         contact.setLead(lead);
         contact.setName(requestDto.getName());
-        contact.setRole(requestDto.getRole());
         contact.setEmail(requestDto.getEmail());
-        contact.setIsPrimary(requestDto.getIsPrimary() != null ? requestDto.getIsPrimary() : false);
         // Assuming phone is not in DTO, or add it to DTO if needed
         // contact.setPhone(requestDto.getPhone());
 
@@ -136,24 +134,22 @@ public class ContactService {
         }
 
         // Handle primary contact logic during update
-        if (requestDto.getIsPrimary() != null && requestDto.getIsPrimary()) {
-            Optional<Contact> primaryContact = contactRepository.findPrimaryContactByLeadId(lead.getId());
-            if (primaryContact.isPresent() && !primaryContact.get().getId().equals(id)) {
-                // Demote existing primary contact
-                primaryContact.get().setIsPrimary(false);
-                contactRepository.save(primaryContact.get());
-            }
-        } else if (contact.getIsPrimary() && (requestDto.getIsPrimary() == null || !requestDto.getIsPrimary())) {
-            // If current contact was primary and is being demoted, ensure another primary is not automatically set,
-            // or handle logic for no primary contact.
-            // For now, allow demotion without forcing a new primary.
-        }
+//        if (requestDto.getIsPrimary() != null && requestDto.getIsPrimary()) {
+//            Optional<Contact> primaryContact = contactRepository.findPrimaryContactByLeadId(lead.getId());
+//            if (primaryContact.isPresent() && !primaryContact.get().getId().equals(id)) {
+//                // Demote existing primary contact
+//                primaryContact.get().setIsPrimary(false);
+//                contactRepository.save(primaryContact.get());
+//            }
+//        } else if (contact.getIsPrimary() && (requestDto.getIsPrimary() == null || !requestDto.getIsPrimary())) {
+//            // If current contact was primary and is being demoted, ensure another primary is not automatically set,
+//            // or handle logic for no primary contact.
+//            // For now, allow demotion without forcing a new primary.
+//        }
 
 
         contact.setName(requestDto.getName());
-        contact.setRole(requestDto.getRole());
         contact.setEmail(requestDto.getEmail());
-        contact.setIsPrimary(requestDto.getIsPrimary() != null ? requestDto.getIsPrimary() : false);
         // Assuming phone is not in DTO, or add it to DTO if needed
         // contact.setPhone(requestDto.getPhone());
 
@@ -187,7 +183,6 @@ public class ContactService {
         dto.setName(contact.getName());
         dto.setRole(contact.getRole());
         dto.setEmail(contact.getEmail());
-        dto.setIsPrimary(contact.getIsPrimary());
         dto.setLeadId(contact.getLead().getId());
         dto.setLeadName(contact.getLead().getName());
         // Assuming a method exists in InteractionRepository to count interactions by contactId

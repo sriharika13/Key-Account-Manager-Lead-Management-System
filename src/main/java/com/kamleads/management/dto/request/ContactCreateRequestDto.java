@@ -8,7 +8,6 @@ import lombok.Data;
 
 import java.util.UUID;
 
-@Data
 public class ContactCreateRequestDto {
     @NotNull(message = "Lead ID is required")
     private UUID leadId;
@@ -25,5 +24,37 @@ public class ContactCreateRequestDto {
     private String email;
 
     private Boolean isPrimary = false;
+
+    public UUID getLeadId() {
+        return leadId;
+    }
+
+    public void setLeadId(UUID leadId) {
+        this.leadId = leadId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getPrimary() {
+        return isPrimary;
+    }
+
+    public void setPrimary(Boolean primary) {
+        isPrimary = primary;
+    }
 }
 

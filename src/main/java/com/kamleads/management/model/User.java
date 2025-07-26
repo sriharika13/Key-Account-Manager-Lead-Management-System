@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "users",
         indexes = {
                 @Index(name = "idx_users_email", columnList = "email", unique = true)
@@ -127,6 +125,46 @@ public class User implements UserDetails { //User Entity represents Key Account 
         return this.email; // Using email as the username for authentication
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setLeads(List<Lead> leads) {
+        this.leads = leads;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
+    }
+
+    public void setScheduledCalls(List<CallSchedule> scheduledCalls) {
+        this.scheduledCalls = scheduledCalls;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true; // Always true for now, implement logic if needed
@@ -147,4 +185,43 @@ public class User implements UserDetails { //User Entity represents Key Account 
         return true; // Always true for now, implement logic if needed (e.g., email verification)
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public List<Lead> getLeads() {
+        return leads;
+    }
+
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public List<CallSchedule> getScheduledCalls() {
+        return scheduledCalls;
+    }
 }

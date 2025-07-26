@@ -16,6 +16,70 @@ public class InteractionCreateRequestDto {
     @NotNull(message = "Lead ID is required")
     private UUID leadId;
 
+    public InteractionType getType() {
+        return type;
+    }
+
+    public void setType(InteractionType type) {
+        this.type = type;
+    }
+
+    public UUID getLeadId() {
+        return leadId;
+    }
+
+    public void setLeadId(UUID leadId) {
+        this.leadId = leadId;
+    }
+
+    public UUID getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(UUID contactId) {
+        this.contactId = contactId;
+    }
+
+    public UUID getKamId() {
+        return kamId;
+    }
+
+    public void setKamId(UUID kamId) {
+        this.kamId = kamId;
+    }
+
+    public InteractionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InteractionStatus status) {
+        this.status = status;
+    }
+
+    public BigDecimal getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(BigDecimal orderValue) {
+        this.orderValue = orderValue;
+    }
+
+    public LocalDate getFollowUpDate() {
+        return followUpDate;
+    }
+
+    public void setFollowUpDate(LocalDate followUpDate) {
+        this.followUpDate = followUpDate;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     private UUID contactId;
 
     @NotNull(message = "KAM ID is required")

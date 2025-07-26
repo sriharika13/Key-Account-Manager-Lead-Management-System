@@ -150,7 +150,9 @@ public class AnalyticsService {
         // It's not directly supported by existing simple repository methods.
         // For demonstration, returning all KAMs with leads, but real implementation would need a custom query.
         return userRepository.findKamsWithLeads(pageable).map(user -> {
+            System.out.println(">>> Class of user: " + user.getClass());
             UserResponseDto dto = new UserResponseDto();
+            System.out.println(">>> DTO : " + dto.getClass());
             dto.setId(user.getId());
             dto.setName(user.getName());
             dto.setEmail(user.getEmail());

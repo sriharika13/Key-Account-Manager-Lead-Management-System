@@ -293,7 +293,6 @@ public class LeadService {
         dto.setName(contact.getName());
         dto.setRole(contact.getRole());
         dto.setEmail(contact.getEmail());
-        dto.setIsPrimary(contact.getIsPrimary());
         return dto;
     }
 
