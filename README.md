@@ -1,4 +1,4 @@
-# Key Account Manager (KAM) Lead Management System
+# Description of Project- Key Account Manager (KAM) Lead Management System
 
 ## Introduction
 Udaan, a B2B e-commerce platform, requires a Lead Management System for Key Account Managers (KAMs) who manage relationships with large restaurant accounts.  
@@ -92,37 +92,6 @@ This system helps track leads, manage interactions, plan calls, and analyze acco
 - Fully working application  
 - Clear dependency specification  
 - Sample data included for testing/demo
-
-### Documentation Requirements
-`README.md` must include:
-- Project overview  
-- System requirements  
-- Installation instructions  
-- Running instructions  
-- Test execution guide  
-- API documentation  
-- Sample usage examples  
-
----
-
-## Video Demonstration
-Provide a **5–10 minute video** demonstrating:
-- Code setup process  
-- Application running  
-- Major features  
-- Sample inputs and outputs  
-
-**Format:** MP4
-
----
-
-## Submission Format
-Submit a ZIP file containing:
-- Source code directory  
-- `README.md`  
-- `requirements.txt` / `package.json`  
-- Demonstration video (`demo.mp4`)
-
 ---
 
 ## Evaluation Criteria
@@ -138,12 +107,6 @@ Submit a ZIP file containing:
 - Configurable components  
 - Use of interfaces / abstractions  
 
-### Completeness
-- All required features implemented  
-- Proper error handling  
-- Edge case coverage  
-- Comprehensive testing  
-
 ### Code Readability
 - Clear naming conventions  
 - Consistent coding style  
@@ -151,58 +114,6 @@ Submit a ZIP file containing:
 - Good documentation  
 
 ---
-
-## Bonus Features
-
-### Unit Testing
-- High test coverage  
-- Edge case testing  
-- Integration tests  
-- Test documentation  
-
-### REST API Implementation
-- RESTful endpoint design  
-- API documentation  
-- Proper HTTP status codes  
-- Request/response validation  
-
-### Authentication & Authorization
-- Secure access control  
-- Role-based permissions  
-
-### Functional User Interface
-- Clean and intuitive UI  
-- Responsive design  
-- Interactive features  
-- Error handling  
-- Cross-browser compatibility  
-
-### Deployment
-- Online deployment  
-- Deployment documentation  
-- Environment configuration  
-- CI/CD pipeline setup  
-
----
-
-## Project Timeline
-- **Submission Deadline:** January 5th, 2025  
-- Early submissions encouraged  
-- Rolling evaluation process  
-
----
-
-## Submission Process
-1. Complete implementation  
-2. Record demo video  
-3. Create ZIP file with all components  
-4. Verify requirements  
-5. Submit via email  
-
----
-
-## Important Notes
-- Incomplete submissions will not be considered  
-- Original work is mandatory  
 - Third-party libraries are allowed with justification  
 - Plagiarism will result in disqualification  
+
